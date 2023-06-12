@@ -1,9 +1,9 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {Button, Gap, Header, Select, TextInput} from '../../components';
-import {useForm} from '../../utils';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import Axios from 'axios';
+import {Button, Gap, Header, Select, TextInput} from '../../components';
+import {setLoading, signUpAction} from '../../redux/action';
+import {useForm} from '../../utils';
 
 const SignUpAddress = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -12,7 +12,7 @@ const SignUpAddress = ({navigation}) => {
     address: '',
     city: 'Tabanan',
   });
-  const registerReducer = useSelector(state => state.registerReducer);
+  const {registerReducer, photoReducer} = useSelector(state => state);
   const dispatch = useDispatch();
 
   const onSubmit = () => {
@@ -20,14 +20,8 @@ const SignUpAddress = ({navigation}) => {
       ...form,
       ...registerReducer,
     };
-    Axios.post('http://localhost:8000/api/register', data)
-      .then(res => {
-        console.log(res);
-        navigation.replace('SuccessSignUp');
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    dispatch(setLoading(true));
+    dispatch(signUpAction(data, photoReducer, navigation));
   };
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -35,7 +29,7 @@ const SignUpAddress = ({navigation}) => {
         <Header
           title="Address"
           subTitle="Make Sure it's Valid"
-          onBack={() => {}}
+          onBack={() => navigation.goBack()}
         />
         <View style={styles.container}>
           <TextInput

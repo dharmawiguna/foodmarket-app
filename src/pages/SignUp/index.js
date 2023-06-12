@@ -1,8 +1,21 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import {Button, Gap, Header, TextInput} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {useForm} from '../../utils';
+import {showMessage, useForm} from '../../utils';
+// import {
+//   ImagePicker,
+//   //  launchCamera,
+//   launchImageLibrary,
+// } from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const SignUp = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -11,6 +24,8 @@ const SignUp = ({navigation}) => {
     password: '',
   });
 
+  const [photo, setPhoto] = useState('');
+
   const dispatch = useDispatch();
 
   const onSubmit = () => {
@@ -18,17 +33,57 @@ const SignUp = ({navigation}) => {
     navigation.navigate('SignUpAddress');
   };
 
+  const addPhoto = () => {
+    console.log('test');
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+      maxWidth: 200,
+      maxHeight: 200,
+    };
+    launchImageLibrary(options, res => {
+      if (res.didCancel || res.error) {
+        showMessage('anda tidak memiliki foto');
+      } else {
+        const source = {uri: res.assets[0].uri};
+        console.log(res);
+        const dataImage = {
+          uri: res.assets[0].uri,
+          type: res.assets[0].type,
+          name: res.assets[0].fileName,
+        };
+
+        setPhoto(source);
+        dispatch({type: 'SET_PHOTO', value: dataImage});
+        dispatch({type: 'SET_UPLOAD_STATUS', value: true});
+        // this.setState({
+        //   avatarSource: source,
+        // });
+      }
+    });
+  };
+
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.pages}>
-        <Header title="Sign Up" subTitle="Register and Eat" onBack={() => {}} />
+        <Header
+          title="Sign Up"
+          subTitle="Register and Eat"
+          onBack={() => navigation.goBack()}
+        />
         <View style={styles.container}>
           <View style={styles.photo}>
-            <View style={styles.borderPhoto}>
-              <View style={styles.photoContainer}>
-                <Text style={styles.addPhoto}>Add Photo</Text>
+            <TouchableOpacity onPress={addPhoto}>
+              <View style={styles.borderPhoto}>
+                {photo ? (
+                  <Image source={photo} style={styles.photoContainer} />
+                ) : (
+                  <View style={styles.photoContainer}>
+                    <Text style={styles.addPhoto}>Add Photo</Text>
+                  </View>
+                )}
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <TextInput
             label="Full Name"
@@ -86,7 +141,8 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 90,
     backgroundColor: '#f0f0f0',
-    padding: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   addPhoto: {
     fontSize: 14,
