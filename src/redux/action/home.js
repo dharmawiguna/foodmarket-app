@@ -6,10 +6,29 @@ export const getFoodData = () => dispatch => {
   // Axios.get(`${API_HOST.url}/food`)
   Axios.get(`https://foodmarket-backend.buildwithangga.id/api/food`)
     .then(res => {
-      console.log(res);
-      console.log('res.data.data.data.name', res.data.data.data);
-      console.log('ke then');
       dispatch({type: 'SET_FOOD', value: res.data.data.data});
+    })
+    .catch(err => {
+      console.log('ke error');
+      console.log(err);
+    });
+};
+
+export const getFoodDataByType = types => dispatch => {
+  // Axios.get(`${API_HOST.url}/food`)
+  Axios.get(
+    `https://foodmarket-backend.buildwithangga.id/api/food?types=${types}`,
+  )
+    .then(res => {
+      if (types === 'new_food') {
+        dispatch({type: 'SET_NEW_TASTE', value: res.data.data.data});
+      }
+      if (types === 'popular') {
+        dispatch({type: 'SET_POPULAR', value: res.data.data.data});
+      }
+      if (types === 'recommended') {
+        dispatch({type: 'SET_RECOMMENDED', value: res.data.data.data});
+      }
     })
     .catch(err => {
       console.log('ke error');

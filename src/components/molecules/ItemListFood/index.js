@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Rating from '../Rating';
+import Number from '../Number';
 
 const ItemListFood = ({
   image,
@@ -27,9 +28,10 @@ const ItemListFood = ({
           <>
             <View style={styles.content}>
               <Text style={styles.title}>{name}</Text>
+              <Number number={price} />
               <Text style={styles.price}>Rp. {price}</Text>
             </View>
-            <Rating rating={rating} />
+            <Rating number={rating} />
           </>
         );
       case 'order-summary':

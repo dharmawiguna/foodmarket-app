@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, useWindowDimensions, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import ItemListFood from '../ItemListFood';
 import {
@@ -9,6 +9,8 @@ import {
   productDummy4,
 } from '../../../assets';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getFoodDataByType} from '../../../redux/action';
 
 const renderTabBar = props => (
   <TabBar
@@ -39,40 +41,27 @@ const renderTabBar = props => (
 
 const NewTaste = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {newTaste} = useSelector(state => state.homeReducer);
+
+  useEffect(() => {
+    dispatch(getFoodDataByType('new_food'));
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy1}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy2}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy3}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy4}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
+      {newTaste.map(item => {
+        return (
+          <ItemListFood
+            key={item.id}
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail')}
+            type="product"
+          />
+        );
+      })}
     </View>
   );
 };
@@ -80,58 +69,54 @@ const NewTaste = ({}) => {
 
 const Popular = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {popular} = useSelector(state => state.homeReducer);
 
+  useEffect(() => {
+    dispatch(getFoodDataByType('popular'));
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy2}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy3}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy4}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
+      {popular.map(item => {
+        return (
+          <ItemListFood
+            key={item.id}
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail')}
+            type="product"
+          />
+        );
+      })}
     </View>
   );
 };
 
 const Recommended = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {recommended} = useSelector(state => state.homeReducer);
 
+  useEffect(() => {
+    dispatch(getFoodDataByType('recommended'));
+  }, []);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy2}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
-      <ItemListFood
-        name="Nasi Goreng"
-        price="20.000"
-        rating={3}
-        image={productDummy3}
-        onPress={() => navigation.navigate('FoodDetail')}
-        type="product"
-      />
+      {recommended.map(item => {
+        return (
+          <ItemListFood
+            key={item.id}
+            name={item.name}
+            price={item.price}
+            rating={item.rate}
+            image={{uri: item.picturePath}}
+            onPress={() => navigation.navigate('FoodDetail')}
+            type="product"
+          />
+        );
+      })}
     </View>
   );
 };
