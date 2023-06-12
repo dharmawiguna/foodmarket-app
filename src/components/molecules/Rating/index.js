@@ -18,8 +18,7 @@ const Rating = ({number}) => {
   return (
     <View style={styles.ratingContainer}>
       <View style={styles.startContainer}>{renderStar()}</View>
-      <Number number={number} type="decimal" />
-      {/* <Text>{number}</Text> */}
+      <Number number={number} type="decimal" style={styles.numberRating} />
     </View>
   );
 };
@@ -27,6 +26,7 @@ const Rating = ({number}) => {
 export default Rating;
 
 const styles = StyleSheet.create({
-  ratingContainer: {flexDirection: 'row', alignItems: 'center'},
+  ratingContainer: {flexDirection: 'row'},
   startContainer: {flexDirection: 'row', marginRight: 4},
+  numberRating: {fontSize: 12, fontFamily: 'Poppins-Regular', color: '#8d92a3'},
 });

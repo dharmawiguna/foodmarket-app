@@ -5,7 +5,7 @@ import {FoodCard, Gap, HomeTabSection} from '../../components';
 import HomeProfile from '../../components/molecules/HomeProfile';
 import {getFoodData} from '../../redux/action';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const dispatch = useDispatch();
   const {food} = useSelector(state => state.homeReducer);
 
@@ -27,6 +27,7 @@ const Home = () => {
                     key={item.id}
                     image={{uri: item.picturePath}}
                     rating={item.rate}
+                    onPress={() => navigation.navigate('FoodDetail', item)}
                   />
                 );
               })}
