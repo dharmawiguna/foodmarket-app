@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   Gap,
@@ -15,19 +15,8 @@ import Axios from 'axios';
 
 const OrderSummary = ({navigation, route}) => {
   const {item, transaction, userProfile} = route.params;
-  const [token, setToken] = useState('');
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [paymentUrl, SetPaymentUrl] = useState('https://google.com');
-
-  useEffect(() => {
-    getData('token').then(res => {
-      // setUserProfile(res);
-      setToken(res.value);
-    });
-    console.log(item);
-    console.log(token);
-    console.log(userProfile.id);
-  }, []);
 
   const onCheckout = () => {
     const data = {
@@ -37,20 +26,20 @@ const OrderSummary = ({navigation, route}) => {
       total: transaction.total,
       status: 'PENDING',
     };
-
-    Axios.post(`${API_HOST.url}/checkout`, data, {
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then(res => {
-        setIsPaymentOpen(true);
-        SetPaymentUrl(res.data.data.payment_url);
+    getData('token').then(resToken => {
+      Axios.post(`${API_HOST.url}/checkout`, data, {
+        headers: {
+          Authorization: resToken.value,
+        },
       })
-      .catch(err => {
-        console.log('checkout proses: ', err);
-      });
-    // navigation.replace('SuccessOrder')
+        .then(res => {
+          setIsPaymentOpen(true);
+          SetPaymentUrl(res.data.data.payment_url);
+        })
+        .catch(err => {
+          console.log('checkout proses: ', err);
+        });
+    });
   };
 
   const onNavChange = state => {
@@ -62,7 +51,7 @@ const OrderSummary = ({navigation, route}) => {
 
     // const titleWeb = '';
     if (urlCheck === '406') {
-      navigation.replace('SuccessOrder');
+      navigation.reset({index: 0, routes: [{name: 'SuccessOrder'}]});
     }
   };
 

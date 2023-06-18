@@ -1,14 +1,11 @@
 import {StyleSheet, Text, View, useWindowDimensions, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import ItemListFood from '../ItemListFood';
-import {
-  productDummy1,
-  productDummy2,
-  productDummy3,
-  productDummy4,
-} from '../../../assets';
+import {productDummy2, productDummy3} from '../../../assets';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {getInProgress, getPastOrder} from '../../../redux/action';
 
 const renderTabBar = props => (
   <TabBar
@@ -39,44 +36,29 @@ const renderTabBar = props => (
 
 const InProgress = ({}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {inProgress} = useSelector(state => state.orderReducer);
+
+  useEffect(() => {
+    dispatch(getInProgress());
+    // console.log('inProgress', inProgress);
+  }, []);
+
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        rating={3}
-        image={productDummy1}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-      />
-      <ItemListFood
-        rating={3}
-        image={productDummy2}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-      />
-      <ItemListFood
-        rating={3}
-        image={productDummy3}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-      />
-      <ItemListFood
-        rating={3}
-        image={productDummy4}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="in-progress"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-      />
+      {inProgress.map(order => {
+        return (
+          <ItemListFood
+            key={order.id}
+            image={{uri: order.food.picturePath}}
+            onPress={() => navigation.navigate('OrderDetail')}
+            type="in-progress"
+            items={order.quantity}
+            price={order.total}
+            name={order.food.name}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -84,37 +66,31 @@ const InProgress = ({}) => {
 
 const PastOrder = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const {pastOrder} = useSelector(state => state.orderReducer);
+
+  useEffect(() => {
+    dispatch(getPastOrder());
+    // console.log('inProgress', inProgress);
+  }, []);
 
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
-      <ItemListFood
-        image={productDummy2}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="past-orders"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-        date="21 Februari 2023"
-        status="Cancel"
-      />
-      <ItemListFood
-        image={productDummy3}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="past-orders"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng2"
-        date="21 Februari 2023"
-      />
-      <ItemListFood
-        image={productDummy4}
-        onPress={() => navigation.navigate('OrderDetail')}
-        type="past-orders"
-        items={3}
-        price="300.000"
-        name="Nasi Goreng"
-        date="21 Februari 2023"
-      />
+      {pastOrder.map(order => {
+        return (
+          <ItemListFood
+            key={order.id}
+            image={{uri: order.food.picturePath}}
+            onPress={() => navigation.navigate('OrderDetail')}
+            type="past-orders"
+            items={order.quantity}
+            price={order.total}
+            name={order.food.name}
+            date={order.created_at}
+            status={order.status}
+          />
+        );
+      })}
     </View>
   );
 };

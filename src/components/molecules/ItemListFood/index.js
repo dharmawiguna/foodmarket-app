@@ -48,24 +48,29 @@ const ItemListFood = ({
           <>
             <View style={styles.content}>
               <Text style={styles.title}>{name}</Text>
-              <Text style={styles.price}>
-                {items} items . Rp. {price}
-              </Text>
+              <View style={styles.row}>
+                <Text style={styles.price}>{items} items</Text>
+                <View style={styles.dot} />
+                <Number number={price} style={styles.price} />
+              </View>
             </View>
           </>
         );
       case 'past-orders':
+        const formatDate = new Date(date).toDateString();
         return (
           <>
             <View style={styles.content}>
               <Text style={styles.title}>{name}</Text>
-              <Text style={styles.price}>
-                {items} items . Rp. {price}
-              </Text>
+              <View style={styles.row}>
+                <Text style={styles.price}>{items} items</Text>
+                <View style={styles.dot} />
+                <Number number={price} style={styles.price} />
+              </View>
             </View>
             <View>
-              <Text style={styles.date}>{date}</Text>
-              <Text style={styles.status}>{status}</Text>
+              <Text style={styles.date}>{formatDate}</Text>
+              <Text style={styles.status(status)}>{status}</Text>
             </View>
           </>
         );
@@ -120,5 +125,17 @@ const styles = StyleSheet.create({
   },
   items: {fontSize: 13, fontFamily: 'Poppins-Regular', color: '#8d92a3'},
   date: {fontSize: 10, fontFamily: 'Poppins-Regular', color: '#8d92a3'},
-  status: {fontSize: 10, fontFamily: 'Poppins-Regular', color: '#d9435e'},
+  status: status => ({
+    fontSize: 10,
+    fontFamily: 'Poppins-Regular',
+    color: status === 'CANCELLED' ? '#d9435e' : '#1ABC9C',
+  }),
+  row: {flexDirection: 'row', alignItems: 'center'},
+  dot: {
+    height: 3,
+    width: 3,
+    borderRadius: 3,
+    backgroundColor: '#8d92a3',
+    marginHorizontal: 4,
+  },
 });
