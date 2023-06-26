@@ -14,7 +14,7 @@ const HomeProfile = () => {
   return (
     <View style={styles.profileContainer}>
       <View>
-        <Text style={styles.appName}>Maxim Food</Text>
+        <Text style={styles.appName}>Dharma Food</Text>
         <Text style={styles.desc}>Let's get some foods</Text>
       </View>
       <Image source={photo} style={styles?.profile} />

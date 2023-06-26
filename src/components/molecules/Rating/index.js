@@ -7,7 +7,7 @@ const Rating = ({number}) => {
   const renderStar = () => {
     let star = [];
     for (let i = 1; i <= 5; i++) {
-      if (i < number) {
+      if (i <= number) {
         star.push(<IcStarOn key={i} />);
       } else {
         star.push(<IcStarOff key={i} />);

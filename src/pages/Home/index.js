@@ -11,7 +11,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     dispatch(getFoodData());
-  }, []);
+  }, [dispatch]);
   return (
     <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.page}>

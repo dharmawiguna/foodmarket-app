@@ -1,13 +1,7 @@
-import {StyleSheet, Text, View, useWindowDimensions, Image} from 'react-native';
+import {Text, View, useWindowDimensions} from 'react-native';
 import React, {useEffect} from 'react';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import ItemListFood from '../ItemListFood';
-import {
-  productDummy1,
-  productDummy2,
-  productDummy3,
-  productDummy4,
-} from '../../../assets';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getFoodDataByType} from '../../../redux/action';
@@ -46,7 +40,7 @@ const NewTaste = ({}) => {
 
   useEffect(() => {
     dispatch(getFoodDataByType('new_food'));
-  }, []);
+  }, [dispatch]);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {newTaste.map(item => {
@@ -74,7 +68,7 @@ const Popular = () => {
 
   useEffect(() => {
     dispatch(getFoodDataByType('popular'));
-  }, []);
+  }, [dispatch]);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {popular.map(item => {
@@ -101,7 +95,7 @@ const Recommended = () => {
 
   useEffect(() => {
     dispatch(getFoodDataByType('recommended'));
-  }, []);
+  }, [dispatch]);
   return (
     <View style={{paddingTop: 8, paddingHorizontal: 24}}>
       {recommended.map(item => {
@@ -149,5 +143,3 @@ const HomeTabSection = () => {
 };
 
 export default HomeTabSection;
-
-const styles = StyleSheet.create({});
